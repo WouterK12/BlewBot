@@ -1,0 +1,5 @@
+.env
+node_modules
+commands/start.js
+commands/stop.js
+modules/tick.js

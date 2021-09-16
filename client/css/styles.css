@@ -1,0 +1,48 @@
+:root {
+  --dark: rgb(51, 51, 51);
+  --gray: rgb(218, 218, 218);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "Open Sans", sans-serif;
+  color: #fff;
+}
+
+html {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+body {
+  margin: 0;
+  background: var(--gray);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Patua One", cursive;
+  letter-spacing: 0.1em;
+}
+
+nav {
+  position: fixed;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  background: var(--dark);
+  box-shadow: 0px 15px 20px rgba(71, 71, 71, 0.267);
+}
+
+main {
+  
+}
