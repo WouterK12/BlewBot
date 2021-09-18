@@ -15,6 +15,11 @@ const CONSTANT = {
     MONTH: "1m",
     ALLTIME: "all",
   },
+  COLOR: {
+    GREEN: "#57F287",
+    YELLOW: "#FEE75C",
+    RED: "#ED4245",
+  },
 };
 
 // returns selected timespan [prevDate, now]
@@ -59,6 +64,17 @@ function GetPresence(event) {
   return presence;
 }
 
+function GetColor(presence) {
+  switch (presence) {
+    case CONSTANT.PRESENCE.CONNECTED:
+      return CONSTANT.COLOR.GREEN;
+    case CONSTANT.PRESENCE.SELFMUTE:
+      return CONSTANT.COLOR.YELLOW;
+    case CONSTANT.PRESENCE.SELFDEAF:
+      return CONSTANT.COLOR.RED;
+  }
+}
+
 // parse data to be compatible with chart dataset
 function ParseData(data, maxPrevDate) {
   let parsedData = [];
@@ -68,14 +84,14 @@ function ParseData(data, maxPrevDate) {
     const user = data[x];
 
     // test if user was updated within active timespan (1h, 4h, 1d, 1w, 1m, all)
-    if (GetDate(user.updatedAt) < maxPrevDate) continue;
+    if (GetDate(user.updatedAt) <= maxPrevDate) continue;
 
     // for every event of that user
     for (let y = 0; y < user.events.length; y++) {
       const event = user.events[y];
 
       // test if event has happened within active timespan (1h, 4h, 1d, 1w, 1m, all)
-      if (GetDate(event.time) < maxPrevDate) continue;
+      if (GetDate(event.time) <= maxPrevDate) continue;
 
       // don't visualize disconnected
       if (GetPresence(event) === CONSTANT.PRESENCE.DISCONNECTED) continue;
@@ -88,10 +104,13 @@ function ParseData(data, maxPrevDate) {
         nextEvent = user.events[y + 1];
       }
 
+      let presence = GetPresence(event);
+
       // create new event
       let newEvent = [
         user.name,
-        GetPresence(event),
+        presence,
+        GetColor(presence),
         GetDate(event.time),
         GetDate(nextEvent.time),
       ];

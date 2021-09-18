@@ -95,16 +95,17 @@ main .chart .scaling {
 }
 main .chart .scaling button {
   margin: 0 1px;
-  padding: 2px 12px;
+  padding: 2px 15px;
 
   border: none;
   border-radius: var(--default-radius);
 
+  font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
   background: var(--light-gray);
 }
-main .chart .scalin button.selected {
+main .chart .scaling button.selected {
   pointer-events: none;
   background: var(--dark);
 }
