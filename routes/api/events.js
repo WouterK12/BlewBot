@@ -2,27 +2,14 @@ const express = require("express");
 const router = express.Router();
 const Event = require("../../models/Event");
 
-// cache
-const NodeCache = require("node-cache");
-const cache = new NodeCache();
-const cacheTime = 60; // seconds
-
 // GET events
 router.get("/", async (req, res) => {
   console.log(`[GET] ${req.headers.host} -> EVENTS`);
-
-  // check if already in cache
-  let eventsCache = cache.get("EVENTS");
-  if (eventsCache) {
-    return res.status(200).send(cache.get("EVENTS"));
-  }
-
   Event.find()
+    .populate("user")
     .then((events) => {
       if (!events) throw 404;
 
-      // add to cache and send response
-      cache.set("EVENTS", events, cacheTime);
       res.status(200).send(events);
     })
     .catch((err) => {

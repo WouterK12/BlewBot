@@ -13,7 +13,7 @@ module.exports = {
       .setColor("#000000")
       .setTitle("BlewBot Help")
       .setDescription(
-        "BlewBot is used to analyze the activity of employees who work online.\nBy [Wouter](https://wouterkoopman.com)"
+        "BlewBot is used to keep track of activity in voice channels.\nBy [Wouter](https://wouterkoopman.com)"
       )
       .setThumbnail(client.user.avatarURL());
 

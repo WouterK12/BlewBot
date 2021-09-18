@@ -9,7 +9,6 @@ client.on("voiceStateUpdate", async (guild, data) => {
 
   const newEvent = new Event({
     _id: mongoose.Types.ObjectId(),
-    user: user._id,
     channel: data.channelID,
     connected: data.channelID ? true : false,
     selfMute: data.selfMute,
@@ -19,5 +18,9 @@ client.on("voiceStateUpdate", async (guild, data) => {
     streaming: data.streaming,
     time: Date.now(),
   });
-  newEvent.save();
+  newEvent.save().then(() => {
+    user.events.push(newEvent._id);
+    user.updatedAt = Date.now();
+    user.save();
+  });
 });

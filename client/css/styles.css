@@ -1,6 +1,13 @@
 :root {
-  --dark: rgb(51, 51, 51);
-  --gray: rgb(218, 218, 218);
+  --dark: #333333;
+  --gray: #464646;
+  --light-gray: #7d7d7d;
+  --green: #57f287;
+  --red: #ed4245;
+  --nav-height: 70px;
+  --header-height: 50px;
+  --aside-width: 300px;
+  --default-radius: 25px;
 }
 
 *,
@@ -10,7 +17,8 @@
 }
 
 html,
-body {
+body,
+button {
   font-family: "Open Sans", sans-serif;
   color: #fff;
 }
@@ -32,17 +40,197 @@ h3 {
   letter-spacing: 0.1em;
 }
 
+button {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: var(--default-radius);
+}
+
 nav {
   position: fixed;
+  top: 0;
+  z-index: 25;
   width: 100%;
+  height: var(--nav-height);
 
   display: flex;
   justify-content: center;
 
   background: var(--dark);
-  box-shadow: 0px 15px 20px rgba(71, 71, 71, 0.267);
+  box-shadow: 0px 15px 20px #050505a1;
 }
 
 main {
-  
+  width: 100%;
+
+  display: flex;
+  margin-top: calc(var(--nav-height) + 50px);
+}
+
+/* chart */
+main .chart {
+  height: 75vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  margin-right: 50px;
+
+  border-radius: var(--default-radius);
+}
+main .chart .canvas {
+  height: calc(100vh - var(--nav-height));
+  width: calc(100vw - var(--aside-width) - 150px);
+  background: var(--dark);
+}
+main .chart .scaling {
+  margin: 10px 0;
+}
+main .chart .scaling button {
+  margin: 0 1px;
+  padding: 2px 12px;
+
+  border: none;
+  border-radius: var(--default-radius);
+
+  font-weight: bold;
+  text-transform: uppercase;
+  background: var(--light-gray);
+}
+main .chart .scalin button.selected {
+  pointer-events: none;
+  background: var(--dark);
+}
+
+/* aside */
+main aside {
+  position: relative;
+  height: calc(100vh - var(--nav-height) - 100px);
+  width: var(--aside-width);
+
+  margin: 0 50px;
+}
+main aside .spacer {
+  height: 50px;
+}
+main aside section .header {
+  height: var(--header-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0;
+
+  border-top-left-radius: var(--default-radius);
+  border-top-right-radius: var(--default-radius);
+  background: var(--dark);
+  box-shadow: 0px 10px 20px var(--gray);
+}
+main aside section .container {
+  border-bottom-left-radius: var(--default-radius);
+  border-bottom-right-radius: var(--default-radius);
+  background: var(--light-gray);
+}
+
+/* users */
+main aside .users .container {
+  height: 52vh;
+  overflow-y: scroll;
+}
+main aside .users .user {
+  display: flex;
+  margin: 10px;
+  padding: 10px;
+
+  color: #000;
+  background: #fff;
+  border-radius: var(--default-radius);
+}
+main aside .users .container .user .profile-picture {
+  height: 40px;
+  border-radius: 50%;
+}
+main aside .users .user .meta {
+  padding-top: 5px;
+  padding-left: 15px;
+}
+main aside .users .user .meta .username {
+  margin: 0;
+}
+main aside .users .user .meta .connection {
+  display: flex;
+  align-items: center;
+  padding-bottom: 5px;
+}
+main aside .users .user .meta .connection .status {
+  margin-right: 5px;
+  font-weight: bold;
+}
+main aside .users .user .meta .connection .status.connected::before {
+  color: var(--green);
+  content: "Connected";
+}
+main aside .users .user .meta .connection .status.disconnected::before {
+  color: var(--red);
+  content: "Disconnected";
+}
+main aside .users .user .meta .connection .time {
+  font-size: 10px;
+  color: #c7c7c7;
+}
+main aside .users .user .meta .connection .time::before {
+  content: "(";
+}
+main aside .users .user .meta .connection .time::after {
+  content: ")";
+}
+main aside .users .user .meta .presence {
+  display: flex;
+}
+main aside .users .user .meta .presence * {
+  height: 20px;
+  padding-right: 5px;
+}
+main aside .users .user .meta .presence .unmuted {
+  content: url(../img/icons/unmuted.svg);
+}
+main aside .users .user .meta .presence .muted {
+  content: url(../img/icons/muted.svg);
+}
+main aside .users .user .meta .presence .undeafened {
+  content: url(../img/icons/undeafened.svg);
+}
+main aside .users .user .meta .presence .deafened {
+  content: url(../img/icons/deafened.svg);
+}
+
+/* statistics */
+main aside .statistics {
+}
+main aside .statistics .container {
+  padding: 15px 0;
+  padding-left: 10px;
+}
+main aside .statistics p {
+  margin: 0;
+  padding: 5px;
+}
+
+/* footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  color: rgb(180, 180, 180);
+  background: var(--dark);
 }
