@@ -28,121 +28,25 @@
       <aside>
         <section class="users">
           <h2 class="header">Users</h2>
-          <div class="container">
-            <div class="user">
+          <div class="container" id="users">
+            <!-- <div class="user">
               <img
                 src="https://picsum.photos/200/200"
                 alt=""
                 class="profile-picture"
-                id="user-profile-picture"
               />
               <div class="meta">
-                <h2 class="username" id="user-username">Name</h2>
+                <h2 class="username">Name</h2>
                 <div class="connection">
-                  <span class="status connected" id="user-status"></span>
-                  <span class="time" id="user-time">2:10:23</span>
+                  <span class="status connected"></span>
+                  <span class="time">2:10:23</span>
                 </div>
                 <div class="presence">
-                  <div class="muted" id="user-mute"></div>
-                  <div class="undeafened" id="user-deaf"></div>
+                  <div class="muted"></div>
+                  <div class="undeafened"></div>
                 </div>
               </div>
-            </div>
-            <div class="user">
-              <img
-                src="https://picsum.photos/200/200"
-                alt=""
-                class="profile-picture"
-                id="user-profile-picture"
-              />
-              <div class="meta">
-                <h2 class="username" id="user-username">Name</h2>
-                <div class="connection">
-                  <span class="status connected" id="user-status"></span>
-                  <span class="time" id="user-time">2:10:23</span>
-                </div>
-                <div class="presence">
-                  <div class="unmuted" id="user-mute"></div>
-                  <div class="undeafened" id="user-deaf"></div>
-                </div>
-              </div>
-            </div>
-            <div class="user">
-              <img
-                src="https://picsum.photos/200/200"
-                alt=""
-                class="profile-picture"
-                id="user-profile-picture"
-              />
-              <div class="meta">
-                <h2 class="username" id="user-username">Name</h2>
-                <div class="connection">
-                  <span class="status disconnected" id="user-status"></span>
-                  <!-- <span class="time" id="user-time">2:10:23</span> -->
-                </div>
-                <div class="presence">
-                  <div class="muted" id="user-mute"></div>
-                  <div class="deafened" id="user-deaf"></div>
-                </div>
-              </div>
-            </div>
-            <div class="user">
-              <img
-                src="https://picsum.photos/200/200"
-                alt=""
-                class="profile-picture"
-                id="user-profile-picture"
-              />
-              <div class="meta">
-                <h2 class="username" id="user-username">Name</h2>
-                <div class="connection">
-                  <span class="status disconnected" id="user-status"></span>
-                  <!-- <span class="time" id="user-time">2:10:23</span> -->
-                </div>
-                <div class="presence">
-                  <div class="muted" id="user-mute"></div>
-                  <div class="deafened" id="user-deaf"></div>
-                </div>
-              </div>
-            </div>
-            <div class="user">
-              <img
-                src="https://picsum.photos/200/200"
-                alt=""
-                class="profile-picture"
-                id="user-profile-picture"
-              />
-              <div class="meta">
-                <h2 class="username" id="user-username">Name</h2>
-                <div class="connection">
-                  <span class="status disconnected" id="user-status"></span>
-                  <!-- <span class="time" id="user-time">2:10:23</span> -->
-                </div>
-                <div class="presence">
-                  <div class="muted" id="user-mute"></div>
-                  <div class="deafened" id="user-deaf"></div>
-                </div>
-              </div>
-            </div>
-            <div class="user">
-              <img
-                src="https://picsum.photos/200/200"
-                alt=""
-                class="profile-picture"
-                id="user-profile-picture"
-              />
-              <div class="meta">
-                <h2 class="username" id="user-username">Name</h2>
-                <div class="connection">
-                  <span class="status disconnected" id="user-status"></span>
-                  <!-- <span class="time" id="user-time">2:10:23</span> -->
-                </div>
-                <div class="presence">
-                  <div class="muted" id="user-mute"></div>
-                  <div class="deafened" id="user-deaf"></div>
-                </div>
-              </div>
-            </div>
+            </div> -->
           </div>
         </section>
         <div class="spacer"></div>
@@ -165,11 +69,11 @@
       <article class="chart">
         <div class="canvas" id="chart"></div>
         <div class="scaling" id="scaling-buttons">
-          <button data-scale="1h">1h</button>
-          <button class="selected" data-scale="4h">4h</button>
-          <button data-scale="1d">1d</button>
-          <button data-scale="1w">1w</button>
-          <button data-scale="1m">1m</button>
+          <button id="button-1h" data-scale="1h">1h</button>
+          <button class="selected" id="button-4h" data-scale="4h">4h</button>
+          <button id="button-1d" data-scale="1d">1d</button>
+          <button id="button-1w" data-scale="1w">1w</button>
+          <button id="button-1m" data-scale="1m">1m</button>
           <!-- <button data-scale="all">all</button> -->
         </div>
       </article>

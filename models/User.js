@@ -4,6 +4,7 @@ const userSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   userId: String,
   name: String,
+  avatar: String,
   events: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
   time: String,
   updatedAt: String,

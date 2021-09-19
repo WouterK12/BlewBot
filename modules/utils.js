@@ -10,6 +10,7 @@ module.exports = {
       _id: mongoose.Types.ObjectId(),
       userId: member.id,
       name: member.user.username,
+      avatar: member.user.avatarURL(),
       time: Date.now(),
       updatedAt: Date.now(),
     });

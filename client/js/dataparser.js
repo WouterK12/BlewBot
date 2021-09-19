@@ -20,6 +20,7 @@ const CONSTANT = {
     YELLOW: "#FEE75C",
     RED: "#ED4245",
   },
+  IDENTIFIER: "local-key",
 };
 
 // returns selected timespan [prevDate, now]
@@ -55,12 +56,28 @@ function GetDate(timeString) {
   return new Date(+timeString);
 }
 
+// convert ms to readable string (hh:mm:ss)
+function GetDuration(duration) {
+  let seconds = Math.floor((duration / 1000) % 60);
+  let minutes = Math.floor((duration / (1000 * 60)) % 60);
+  let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+
+  return `${hours}:${minutes}:${seconds}`;
+}
+
 // get active presence from event
 function GetPresence(event) {
   let presence = CONSTANT.PRESENCE.DISCONNECTED;
+
   if (event.connected) presence = CONSTANT.PRESENCE.CONNECTED;
   if (event.selfMute) presence = CONSTANT.PRESENCE.SELFMUTE;
   if (event.selfDeaf) presence = CONSTANT.PRESENCE.SELFDEAF;
+
+  if (!event.connected) presence = CONSTANT.PRESENCE.DISCONNECTED;
   return presence;
 }
 
@@ -89,22 +106,39 @@ function ParseData(data, maxPrevDate) {
     // for every event of that user
     for (let y = 0; y < user.events.length; y++) {
       const event = user.events[y];
+      console.log(event);
 
       // test if event has happened within active timespan (1h, 4h, 1d, 1w, 1m, all)
       if (GetDate(event.time) <= maxPrevDate) continue;
 
       // don't visualize disconnected
-      if (GetPresence(event) === CONSTANT.PRESENCE.DISCONNECTED) continue;
+      let presence = GetPresence(event);
+      if (presence === CONSTANT.PRESENCE.DISCONNECTED) continue;
 
       // find end time of an event
       let nextEvent;
       if (y + 1 === user.events.length) {
-        break;
+        // if current event is connected, but no next event, stay connected
+        if (event.connected) {
+          nextEvent = {
+            connected: event.connected,
+            selfMute: event.selfMute,
+            selfDeaf: event.selfDeaf,
+            time: new Date().getTime(),
+          };
+        } else {
+          // else user has disconnected at current event
+          nextEvent = event;
+        }
       } else {
+        // else next event exists
         nextEvent = user.events[y + 1];
       }
 
-      let presence = GetPresence(event);
+      // if (GetPresence(nextEvent) === CONSTANT.PRESENCE.DISCONNECTED) continue;
+
+      // don't visualize the same events after eachother
+      // if (y !== 0 && presence === GetPresence(user.events[y - 1])) break;
 
       // create new event
       let newEvent = [

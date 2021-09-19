@@ -88,12 +88,13 @@ main .chart {
 main .chart .canvas {
   height: calc(100vh - var(--nav-height));
   width: calc(100vw - var(--aside-width) - 150px);
-  background: var(--dark);
-}
-main .chart .canvas.no-data {
+
   display: flex;
   justify-content: center;
-  padding-top: 50px;
+  padding: 50px;
+
+  border-radius: var(--default-radius);
+  background: var(--dark);
 }
 main .chart .scaling {
   margin: 10px 0;
@@ -152,7 +153,7 @@ main aside .users .container {
 }
 main aside .users .user {
   display: flex;
-  margin: 10px;
+  margin: 15px;
   padding: 10px;
 
   color: #000;
@@ -179,11 +180,11 @@ main aside .users .user .meta .connection .status {
   margin-right: 5px;
   font-weight: bold;
 }
-main aside .users .user .meta .connection .status.connected::before {
+main aside .users .user .meta .connection .status.Connected::before {
   color: var(--green);
   content: "Connected";
 }
-main aside .users .user .meta .connection .status.disconnected::before {
+main aside .users .user .meta .connection .status.Disconnected::before {
   color: var(--red);
   content: "Disconnected";
 }
@@ -218,8 +219,6 @@ main aside .users .user .meta .presence .deafened {
 }
 
 /* statistics */
-main aside .statistics {
-}
 main aside .statistics .container {
   padding: 15px 0;
   padding-left: 10px;

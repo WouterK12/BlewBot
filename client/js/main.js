@@ -1,6 +1,9 @@
 google.charts.load("current", { packages: ["timeline"] });
 google.charts.setOnLoadCallback(Refresh);
-var timespan = CONSTANT.TIMESPAN.FOURHOURS; // default time period
+
+// time period
+var timespan = localStorage.getItem(CONSTANT.IDENTIFIER);
+if (!timespan) timespan = CONSTANT.TIMESPAN.FOURHOURS;
 
 async function Refresh() {
   const users = await FetchData("/api/users");
@@ -25,7 +28,7 @@ async function FetchData(endpoint) {
 
 function UpdateGraph(data) {
   var container = document.getElementById("chart");
-  container.classList.remove("no-data");
+  container.innerHTML = null;
 
   var chart = new google.visualization.Timeline(container);
   var dataTable = new google.visualization.DataTable();
@@ -41,7 +44,6 @@ function UpdateGraph(data) {
   // parse data from API and add to table
   var parsedData = ParseData(data, startDates[0]);
   if (!parsedData || !parsedData.length) {
-    container.classList.add("no-data");
     container.innerText = "No data was found for this time period.";
     return;
   }
@@ -50,7 +52,7 @@ function UpdateGraph(data) {
   // set options
   var options = {
     hAxis: {
-      format: "hh:mm",
+      format: "HH:mm",
       minValue: startDates[0],
       maxValue: startDates[1],
     },
@@ -59,6 +61,13 @@ function UpdateGraph(data) {
       rowLabelStyle: { fontName: "Patua One", fontSize: 24, color: "#000" },
     },
   };
+
+  if (timespan === CONSTANT.TIMESPAN.WEEK) {
+    options.hAxis.format = "dd/MM";
+  }
+  if (timespan === CONSTANT.TIMESPAN.MONTH) {
+    options.hAxis.format = "dd/MM/yyyy";
+  }
 
   // make timestamp texts color white
   google.visualization.events.addListener(chart, "ready", function () {
@@ -74,6 +83,106 @@ function UpdateGraph(data) {
 
   // draw chart
   chart.draw(dataTable, options);
+
+  // update users list
+  UpdateUsers(data, parsedData);
+}
+
+function UpdateUsers(data, parsedData) {
+  if (!data || !data.length) return;
+  if (!parsedData || !parsedData.length) return;
+
+  const userList = document.getElementById("users");
+  userList.innerHTML = null;
+
+  for (let i = 0; i < data.length; i++) {
+    const user = data[i];
+
+    // find most recent parsed event of user
+    let latestEvent;
+    for (let i = 0; i < parsedData.length; i++) {
+      if (parsedData[i][0] === user.name) latestEvent = parsedData[i];
+    }
+    if (!latestEvent) continue;
+
+    // main div
+    let newUser = document.createElement("DIV");
+    newUser.classList.add("user");
+
+    let profilePicture = document.createElement("IMG");
+    profilePicture.classList.add("profile-picture");
+    profilePicture.src = user.avatar;
+    newUser.appendChild(profilePicture);
+
+    // meta
+    let meta = document.createElement("DIV");
+    meta.classList.add("meta");
+    newUser.appendChild(meta);
+
+    let username = document.createElement("H2");
+    username.classList.add("username");
+    username.innerText = user.name;
+    meta.appendChild(username);
+
+    // connection
+    let connection = document.createElement("DIV");
+    connection.classList.add("connection");
+    meta.appendChild(connection);
+
+    // status
+    let status = document.createElement("SPAN");
+    status.classList.add("status");
+
+    // compare if date of latest event is close to now (within 10000ms)
+    const timeThreshold = 1e4;
+    var latestTime = latestEvent[4].getTime();
+    var nowTime = Date.now();
+    latestTime = Math.floor(latestTime / timeThreshold);
+    nowTime = Math.floor(nowTime / timeThreshold);
+
+    const connectionString =
+      latestTime == nowTime
+        ? CONSTANT.PRESENCE.CONNECTED
+        : CONSTANT.PRESENCE.DISCONNECTED;
+    status.classList.add(connectionString);
+
+    connection.appendChild(status);
+
+    if (connectionString === CONSTANT.PRESENCE.CONNECTED) {
+      // connection time
+      let time = document.createElement("SPAN");
+      time.classList.add("time");
+      time.innerText = GetDuration(latestEvent[4] - latestEvent[3]);
+      connection.appendChild(time);
+
+      // presence icons
+      let presence = document.createElement("DIV");
+      presence.classList.add("presence");
+      meta.appendChild(presence);
+
+      let selfMute = false;
+      let selfDeaf = false;
+      switch (latestEvent[1]) {
+        case CONSTANT.PRESENCE.SELFMUTE:
+          selfMute = true;
+          break;
+        case CONSTANT.PRESENCE.SELFDEAF:
+          selfDeaf = true;
+          break;
+      }
+
+      let mute = document.createElement("DIV");
+      mute.classList.add(selfMute || selfDeaf ? "muted" : "unmuted");
+      presence.appendChild(mute);
+
+      let deaf = document.createElement("DIV");
+      deaf.classList.add(selfDeaf ? "deafened" : "undeafened");
+      presence.appendChild(deaf);
+    }
+
+    // add user to list
+    userList.appendChild(newUser);
+  }
 }
 
 function UpdateStatistics(data) {
@@ -84,6 +193,8 @@ function UpdateStatistics(data) {
 }
 
 window.addEventListener("load", () => {
+  SelectButton(timespan);
+
   // add listeners to scaling buttons
   const scalingButtons = document.getElementById("scaling-buttons").children;
   for (let i = 0; i < scalingButtons.length; i++) {
@@ -91,6 +202,7 @@ window.addEventListener("load", () => {
 
     button.addEventListener("click", () => {
       timespan = button.dataset.scale;
+      localStorage.setItem(CONSTANT.IDENTIFIER, timespan);
 
       ClearButtonSelection(scalingButtons);
       button.classList.add("selected");
@@ -100,8 +212,17 @@ window.addEventListener("load", () => {
   }
 });
 
+// remove selection from all buttons
 function ClearButtonSelection(buttons) {
   for (let i = 0; i < buttons.length; i++) {
     buttons[i].classList.remove("selected");
   }
+}
+
+// used when loading page (from localStorage)
+function SelectButton(timespan) {
+  const buttons = document.getElementById("scaling-buttons").children;
+  ClearButtonSelection(buttons);
+  const button = document.getElementById(`button-${timespan}`);
+  button.classList.add("selected");
 }
