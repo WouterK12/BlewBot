@@ -55,7 +55,8 @@ const app = express();
 const port = process.env.PORT || 5800;
 
 app.use(express.json());
-app.use("/api/events", require("./routes/api/events"));
 app.use("/api/users", require("./routes/api/users"));
+app.use("/api/events", require("./routes/api/events"));
+app.use("/api/statistics", require("./routes/api/statistics"));
 app.use(express.static("client"));
 app.listen(port, () => console.log(`[WEB] Server started on port ${port}`));

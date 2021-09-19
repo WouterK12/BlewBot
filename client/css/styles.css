@@ -90,6 +90,11 @@ main .chart .canvas {
   width: calc(100vw - var(--aside-width) - 150px);
   background: var(--dark);
 }
+main .chart .canvas.no-data {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+}
 main .chart .scaling {
   margin: 10px 0;
 }

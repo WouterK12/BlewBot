@@ -43,7 +43,7 @@ function GetScalingDates(timespan) {
       prevDate.setMonth(prevDate.getMonth() - 1);
       break;
     case CONSTANT.TIMESPAN.ALLTIME:
-      //
+      // not implemented
       break;
   }
 
@@ -96,10 +96,10 @@ function ParseData(data, maxPrevDate) {
       // don't visualize disconnected
       if (GetPresence(event) === CONSTANT.PRESENCE.DISCONNECTED) continue;
 
-      // used to find end time of an event
+      // find end time of an event
       let nextEvent;
       if (y + 1 === user.events.length) {
-        nextEvent = event;
+        break;
       } else {
         nextEvent = user.events[y + 1];
       }

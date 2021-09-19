@@ -151,26 +151,26 @@
           <div class="container">
             <p>
               <span><b>Uptime | </b></span>
-              <span id="uptime">2d 1h</span>
+              <span id="uptime">0.0 hours</span>
             </p>
             <p>
               <span>
-                <b>Total recorded events | </b>
+                <b>Total captured events | </b>
               </span>
-              <span id="total-events">1.3K</span>
+              <span id="total-events">0</span>
             </p>
           </div>
         </section>
       </aside>
       <article class="chart">
         <div class="canvas" id="chart"></div>
-        <div class="scaling">
-          <button class="selected" id="scaling-1h">1h</button>
-          <button id="scaling-4h">4h</button>
-          <button id="scaling-1d">1d</button>
-          <button id="scaling-1w">1w</button>
-          <button id="scaling-1m">1m</button>
-          <button id="scaling-all">all</button>
+        <div class="scaling" id="scaling-buttons">
+          <button data-scale="1h">1h</button>
+          <button class="selected" data-scale="4h">4h</button>
+          <button data-scale="1d">1d</button>
+          <button data-scale="1w">1w</button>
+          <button data-scale="1m">1m</button>
+          <!-- <button data-scale="all">all</button> -->
         </div>
       </article>
     </main>
