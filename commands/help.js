@@ -10,7 +10,6 @@ module.exports = {
 
   async execute(message, args) {
     const helpEmbed = new MessageEmbed()
-      .setColor("#000000")
       .setTitle("BlewBot Help")
       .setDescription(
         "BlewBot is used to keep track of activity in voice channels.\nBy [Wouter](https://wouterkoopman.com)"
