@@ -2,8 +2,18 @@ google.charts.load("current", { packages: ["timeline"] });
 google.charts.setOnLoadCallback(Refresh);
 
 // time period
-var timespan = localStorage.getItem(CONSTANT.IDENTIFIER);
-if (!timespan) timespan = CONSTANT.TIMESPAN.FOURHOURS;
+var timespan = localStorage.getItem(CONSTANT.IDENTIFIER.TIMESPAN);
+if (!timespan) timespan = CONSTANT.TIMESPAN.HOUR;
+
+// auto update interval
+var autoUpdateInterval = localStorage.getItem(CONSTANT.IDENTIFIER.AUTOUPDATE);
+if (autoUpdateInterval) StartAutoUpdate();
+
+function StartAutoUpdate() {
+  autoUpdateInterval = setInterval(() => {
+    Refresh();
+  }, CONSTANT.AUTOUPDATEINTERVAL);
+}
 
 async function Refresh() {
   var updatedText = document.getElementById("updated");
@@ -87,6 +97,7 @@ function UpdateGraph(data) {
   google.visualization.events.addListener(chart, "ready", function () {
     // make timestamp texts color white
     var labels = container.getElementsByTagName("text");
+    // hey Luc, dit is regel 100 :D
     Array.prototype.forEach.call(labels, (label) => {
       if (label.getAttribute("text-anchor") === "middle") {
         label.setAttribute("fill", "#ffffff");
@@ -214,17 +225,35 @@ function UpdateStatistics(data) {
   totalEvents.innerText = data.capturedEvents;
 }
 
+// when DOM has loaded
 window.addEventListener("load", () => {
-  SelectButton(timespan);
+  // add listener to auto update check
+  const autoUpdateCheck = document.getElementById("auto-update-checkbox");
+  // revert settings from localStorage
+  SelectCheckbox(autoUpdateCheck);
+
+  autoUpdateCheck.addEventListener("change", (e) => {
+    if (autoUpdateCheck.checked) {
+      StartAutoUpdate();
+      Refresh();
+      localStorage.setItem(CONSTANT.IDENTIFIER.AUTOUPDATE, true);
+    } else {
+      clearInterval(autoUpdateInterval);
+      localStorage.removeItem(CONSTANT.IDENTIFIER.AUTOUPDATE);
+    }
+  });
 
   // add listeners to scaling buttons
   const scalingButtons = document.getElementById("scaling-buttons").children;
+  // revert settings from localStorage
+  SelectButton(scalingButtons);
+
   for (let i = 0; i < scalingButtons.length; i++) {
     const button = scalingButtons[i];
 
     button.addEventListener("click", () => {
       timespan = button.dataset.scale;
-      localStorage.setItem(CONSTANT.IDENTIFIER, timespan);
+      localStorage.setItem(CONSTANT.IDENTIFIER.TIMESPAN, timespan);
 
       ClearButtonSelection(scalingButtons);
       button.classList.add("selected");
@@ -232,7 +261,27 @@ window.addEventListener("load", () => {
       Refresh();
     });
   }
+
+  // add listener to logout button
+  const logoutButton = document.getElementById("logout-button");
+  logoutButton.addEventListener("click", () => {
+    Logout();
+  });
 });
+
+// used when loading page (from localStorage)
+function SelectCheckbox(autoUpdateCheck) {
+  if (autoUpdateInterval) {
+    autoUpdateCheck.checked = true;
+  }
+}
+
+// used when loading page (from localStorage)
+function SelectButton(scalingButtons) {
+  ClearButtonSelection(scalingButtons);
+  const button = document.getElementById(`button-${timespan}`);
+  button.classList.add("selected");
+}
 
 // remove selection from all buttons
 function ClearButtonSelection(buttons) {
@@ -241,10 +290,14 @@ function ClearButtonSelection(buttons) {
   }
 }
 
-// used when loading page (from localStorage)
-function SelectButton(timespan) {
-  const buttons = document.getElementById("scaling-buttons").children;
-  ClearButtonSelection(buttons);
-  const button = document.getElementById(`button-${timespan}`);
-  button.classList.add("selected");
+function Logout() {
+  fetch("/logout", {
+    method: "DELETE",
+    credentials: "include",
+  })
+    .then(() => {
+      // to index
+      window.location.href = window.location;
+    })
+    .catch((err) => {});
 }

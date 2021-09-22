@@ -9,4 +9,7 @@ client.on("ready", async () => {
 
   const guilds = client.guilds.cache.size;
   console.log(`[BOT] Currently in ${guilds} guilds.`);
+
+  // Todo: check of users in voice channel(s) and update their latest events to match their current conditions
+  // (if the bot unexpectedly went offline)
 });

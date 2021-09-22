@@ -20,7 +20,11 @@ const CONSTANT = {
     YELLOW: "#FEE75C",
     RED: "#ED4245",
   },
-  IDENTIFIER: "local-key",
+  IDENTIFIER: {
+    TIMESPAN: "timespan-key",
+    AUTOUPDATE: "auto-update-key",
+  },
+  AUTOUPDATEINTERVAL: 5000,
 };
 
 // returns selected timespan [prevDate, now]

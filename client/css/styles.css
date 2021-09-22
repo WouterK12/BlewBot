@@ -74,6 +74,62 @@ main {
   margin-top: calc(var(--nav-height) + 50px);
 }
 
+/* login */
+main.login {
+  display: flex;
+  justify-content: center;
+}
+main.login div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 60px;
+
+  background: var(--dark);
+  border-radius: var(--default-radius);
+}
+main.login div .header {
+  margin-bottom: 40px;
+}
+main.login div form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  font-weight: bold;
+}
+main.login div form .error {
+  display: none;
+  margin-bottom: 15px;
+  color: var(--red);
+}
+main.login div form input {
+  height: 30px;
+  padding: 0 10px;
+
+  font-size: 18px;
+  background: var(--very-light-gray);
+
+  border: none;
+  border-radius: 10px;
+}
+main.login div form button {
+  width: max-content;
+  padding: 5px 20px;
+  margin: 30px;
+  /* margin-left: 0; */
+
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 16px;
+  background: var(--very-light-gray);
+
+  border: none;
+  border-radius: var(--default-radius);
+}
+
 /* chart */
 main .chart {
   height: 75vh;
@@ -107,10 +163,41 @@ main .chart .canvas {
   border-radius: var(--default-radius);
   background: var(--dark);
 }
-main .chart .scaling {
+/* controls */
+main .chart .controls {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+main .chart .controls .auto-update {
+  display: flex;
+  align-items: center;
+}
+main .chart .controls .auto-update input {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+
+  color: var(--very-light-gray);
+  font-size: 25px;
+  line-height: 11px;
+
+  border: 2px solid var(--very-light-gray);
+  border-radius: 5px;
+}
+main .chart .controls .auto-update input:checked::after {
+  content: "■";
+}
+main .chart .controls .scaling {
   margin: 10px 0;
 }
-main .chart .scaling button {
+main .chart .controls .scaling button {
   margin: 0 1px;
   padding: 2px 15px;
 
@@ -122,7 +209,7 @@ main .chart .scaling button {
   text-transform: uppercase;
   background: var(--light-gray);
 }
-main .chart .scaling button.selected {
+main .chart .controls .scaling button.selected {
   pointer-events: none;
   background: var(--dark);
 }
@@ -242,10 +329,26 @@ main aside .statistics p {
 footer {
   position: fixed;
   bottom: 0;
+  width: 100%;
+
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  align-items: center;
+
   padding: 10px;
   color: var(--very-light-gray);
   background: var(--dark);
+}
+footer button.logout {
+  width: max-content;
+  padding: 5px 15px;
+
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  background: var(--very-light-gray);
+
+  border: none;
+  border-radius: var(--default-radius);
 }

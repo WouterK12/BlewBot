@@ -15,69 +15,20 @@
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Patua+One&display=swap"
       rel="stylesheet"
     />
-    <script src="js/loader.js"></script>
-    <!-- <script src="js/chart.min.js"></script> -->
-    <script src="js/dataparser.js"></script>
-    <script src="js/main.js"></script>
-
-    <title>BlewBot Dashboard</title>
+    <script src="js/login.js"></script>
+    <title>Login - BlewBot Dashboard</title>
   </head>
   <body>
     <nav><h1>BlewBot Dashboard</h1></nav>
-    <main>
-      <aside>
-        <section class="users">
-          <h2 class="header">Users</h2>
-          <div class="container" id="users">
-            <!-- <div class="user">
-              <img
-                src="https://picsum.photos/200/200"
-                alt=""
-                class="profile-picture"
-              />
-              <div class="meta">
-                <h2 class="username">Name</h2>
-                <div class="connection">
-                  <span class="status connected"></span>
-                  <span class="time">2:10:23</span>
-                </div>
-                <div class="presence">
-                  <div class="muted"></div>
-                  <div class="undeafened"></div>
-                </div>
-              </div>
-            </div> -->
-          </div>
-        </section>
-        <div class="spacer"></div>
-        <section class="statistics">
-          <h2 class="header">Statistics</h2>
-          <div class="container">
-            <p>
-              <span><b>Uptime | </b></span>
-              <span id="uptime">0.0 hours</span>
-            </p>
-            <p>
-              <span>
-                <b>Total captured events | </b>
-              </span>
-              <span id="total-events">0</span>
-            </p>
-          </div>
-        </section>
-      </aside>
-      <article class="chart">
-        <span class="updated" id="updated">Updated:</span>
-        <div class="canvas" id="chart"></div>
-        <div class="scaling" id="scaling-buttons">
-          <button id="button-1h" data-scale="1h">1h</button>
-          <button class="selected" id="button-4h" data-scale="4h">4h</button>
-          <button id="button-1d" data-scale="1d">1d</button>
-          <button id="button-1w" data-scale="1w">1w</button>
-          <button id="button-1m" data-scale="1m">1m</button>
-          <!-- <button data-scale="all">all</button> -->
-        </div>
-      </article>
+    <main class="login">
+      <div>
+        <h2 class="header">Log in</h2>
+        <form id="login-form">
+          <span id="error-message" class="error"></span>
+          <input id="password" type="password" required />
+          <button type="submit">Log in</button>
+        </form>
+      </div>
     </main>
     <footer>
       Copyright ©
