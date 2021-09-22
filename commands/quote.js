@@ -7,7 +7,7 @@ module.exports = {
   aliases: ["q"],
   guildOnly: false,
   cooldown: 5,
-  description: "Pong!",
+  description: "A potentially inspiring quote.",
 
   async execute(message, args) {
     axios

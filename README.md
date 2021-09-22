@@ -18,6 +18,7 @@ BlewBot is a Discord bot. Use it to keep track of activity in voice channels.
 ```.env
 TOKEN=YOURTOKEN
 PREFIX=!
+DASHBOARD_URL=https://dashboard.yourdomain.com
 ```
 
 ### Start
