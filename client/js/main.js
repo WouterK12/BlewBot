@@ -77,11 +77,11 @@ function UpdateGraph(data) {
     },
   };
 
-  if (timespan === CONSTANT.TIMESPAN.WEEK) {
+  if (
+    timespan === CONSTANT.TIMESPAN.WEEK ||
+    timespan === CONSTANT.TIMESPAN.MONTH
+  ) {
     options.hAxis.format = "dd/MM";
-  }
-  if (timespan === CONSTANT.TIMESPAN.MONTH) {
-    options.hAxis.format = "dd/MM/yyyy";
   }
 
   google.visualization.events.addListener(chart, "ready", function () {
@@ -147,13 +147,8 @@ function UpdateUsers(data, parsedData) {
     let connectionString = CONSTANT.PRESENCE.DISCONNECTED;
     if (latestEvent) {
       // compare if date of latest event is close to now (within 10000ms)
-      const timeThreshold = 1e4;
-      var latestTime = latestEvent[4].getTime();
-      var nowTime = Date.now();
-      latestTime = Math.floor(latestTime / timeThreshold);
-      nowTime = Math.floor(nowTime / timeThreshold);
-
-      if (latestTime == nowTime) {
+      // if so, user is connected
+      if (IsClose(latestEvent[4], new Date())) {
         connectionString = CONSTANT.PRESENCE.CONNECTED;
       }
     }
@@ -166,8 +161,21 @@ function UpdateUsers(data, parsedData) {
       // connection time
       let time = document.createElement("SPAN");
       time.classList.add("time");
-      time.innerText = GetDuration(latestEvent[4] - latestEvent[3]);
-      connection.appendChild(time);
+
+      // find date when user connected (session)
+      let connectionStartDate;
+      // first event in array is the oldest, loop through it in reverse (chronological)
+      for (let i = user.events.length - 1; i > 0; i--) {
+        const event = user.events[i];
+
+        if (event.connected) connectionStartDate = GetDate(event.time);
+        if (!event.connected) break;
+      }
+
+      if (connectionStartDate) {
+        time.innerText = GetDuration(new Date() - connectionStartDate); // --------- latestEvent[4] to new Date()????? /// is latestEvent then still necessary?
+        connection.appendChild(time);
+      }
 
       // presence icons
       let presence = document.createElement("DIV");

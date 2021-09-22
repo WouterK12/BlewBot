@@ -69,15 +69,25 @@ function GetDuration(duration) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
+// check if two dates are close to eachother (within 10000ms)
+function IsClose(date1, date2) {
+  const timeThreshold = 1e4;
+  date1 = Math.floor(date1.getTime() / timeThreshold);
+  date2 = Math.floor(date2.getTime() / timeThreshold);
+
+  if (date1 == date2) return true;
+  return false;
+}
+
 // get active presence from event
 function GetPresence(event) {
   let presence = CONSTANT.PRESENCE.DISCONNECTED;
 
-  if (event.connected) presence = CONSTANT.PRESENCE.CONNECTED;
-  if (event.selfMute) presence = CONSTANT.PRESENCE.SELFMUTE;
-  if (event.selfDeaf) presence = CONSTANT.PRESENCE.SELFDEAF;
-
-  if (!event.connected) presence = CONSTANT.PRESENCE.DISCONNECTED;
+  if (event.connected) {
+    presence = CONSTANT.PRESENCE.CONNECTED;
+    if (event.selfMute) presence = CONSTANT.PRESENCE.SELFMUTE;
+    if (event.selfDeaf) presence = CONSTANT.PRESENCE.SELFDEAF;
+  }
   return presence;
 }
 
@@ -106,7 +116,6 @@ function ParseData(data, maxPrevDate) {
     // for every event of that user
     for (let y = 0; y < user.events.length; y++) {
       const event = user.events[y];
-      console.log(event);
 
       // test if event has happened within active timespan (1h, 4h, 1d, 1w, 1m, all)
       if (GetDate(event.time) <= maxPrevDate) continue;
@@ -134,11 +143,6 @@ function ParseData(data, maxPrevDate) {
         // else next event exists
         nextEvent = user.events[y + 1];
       }
-
-      // if (GetPresence(nextEvent) === CONSTANT.PRESENCE.DISCONNECTED) continue;
-
-      // don't visualize the same events after eachother
-      // if (y !== 0 && presence === GetPresence(user.events[y - 1])) break;
 
       // create new event
       let newEvent = [
