@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
       // create and save new tokens
       const data = { password: password };
       const accessToken = generateAccessToken(data);
-      console.log(`[INFO] -> RECEIVED ACCESSTOKEN`);
+      console.log(`[INFO] PASSWORD CORRECT, GENERATED ACCESSTOKEN`);
 
       // httpOnly cookie expires in 2 days and is not accessible by client
       res.cookie(

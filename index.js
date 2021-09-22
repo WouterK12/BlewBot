@@ -13,7 +13,7 @@ mongoose.connect("mongodb://localhost/blewbot", {
   useUnifiedTopology: true,
 });
 mongoose.connection.once("open", function () {
-  console.log("MongoDB database connection established successfully");
+  console.log("[INFO] MongoDB database connection established");
 });
 
 module.exports = {
