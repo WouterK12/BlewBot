@@ -106,9 +106,6 @@ function SortUsersByConnection(a, b) {
   return 0;
 }
 
-// sort function to compare data user names
-function CompareNames(a, b) {}
-
 // get active presence from event
 function GetPresence(event) {
   let presence = CONSTANT.PRESENCE.DISCONNECTED;
