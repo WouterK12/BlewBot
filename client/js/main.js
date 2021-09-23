@@ -117,6 +117,9 @@ function UpdateUsers(data, parsedData) {
 
   if (!data || !data.length) return;
 
+  // order users by connection status, then name
+  data.sort(SortUsersByConnection);
+
   // for every user
   for (let i = 0; i < data.length; i++) {
     const user = data[i];

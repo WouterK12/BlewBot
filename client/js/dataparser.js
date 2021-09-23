@@ -83,6 +83,32 @@ function IsClose(date1, date2) {
   return false;
 }
 
+// sort function to compare users (sort user list)
+function SortUsersByConnection(a, b) {
+  let ac = a.events[a.events.length - 1].connected;
+  let bc = b.events[b.events.length - 1].connected;
+
+  // sort by connection status
+  if (ac !== bc) {
+    if (ac === true) return -1;
+    if (ac === false) return 0;
+  }
+
+  // sort by name
+  if (ac === bc) {
+    let an = a.name.toLowerCase();
+    let bn = b.name.toLowerCase();
+
+    if (an < bn) return -1;
+    if (an > bn) return 1;
+  }
+
+  return 0;
+}
+
+// sort function to compare data user names
+function CompareNames(a, b) {}
+
 // get active presence from event
 function GetPresence(event) {
   let presence = CONSTANT.PRESENCE.DISCONNECTED;
