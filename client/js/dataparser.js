@@ -36,7 +36,7 @@ function GetScalingDates(timespan) {
   switch (timespan) {
     case CONSTANT.TIMESPAN.HOUR:
       prevDate.setHours(prevDate.getHours() - 1);
-      // prevDate.setMinutes(prevDate.getMinutes() - 5); // for testing
+      // prevDate.setMinutes(prevDate.getMinutes() - 2); // for testing
       break;
     case CONSTANT.TIMESPAN.FOURHOURS:
       prevDate.setHours(prevDate.getHours() - 4);
@@ -73,9 +73,9 @@ function GetDuration(duration) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-// check if two dates are close to eachother (within 10000ms)
+// check if two dates are close to eachother (within 5000ms)
 function IsClose(date1, date2) {
-  const timeThreshold = 1e4;
+  const timeThreshold = 1e3 * 5;
   date1 = Math.floor(date1.getTime() / timeThreshold);
   date2 = Math.floor(date2.getTime() / timeThreshold);
 
