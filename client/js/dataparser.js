@@ -5,6 +5,7 @@ const CONSTANT = {
     CONNECTED: "Connected",
     SELFMUTE: "Muted",
     SELFDEAF: "Deafened",
+    STREAMING: "Streaming",
   },
   EXCEPTION: ["_id", "user", "channel", "time"],
   TIMESPAN: {
@@ -19,6 +20,7 @@ const CONSTANT = {
     GREEN: "#57F287",
     YELLOW: "#FEE75C",
     RED: "#ED4245",
+    PURPLE: "#593695",
   },
   IDENTIFIER: {
     TIMESPAN: "timespan-key",
@@ -47,9 +49,6 @@ function GetScalingDates(timespan) {
       break;
     case CONSTANT.TIMESPAN.MONTH:
       prevDate.setMonth(prevDate.getMonth() - 1);
-      break;
-    case CONSTANT.TIMESPAN.ALLTIME:
-      // not implemented
       break;
   }
 
@@ -90,6 +89,7 @@ function GetPresence(event) {
 
   if (event.connected) {
     presence = CONSTANT.PRESENCE.CONNECTED;
+    if (event.streaming) presence = CONSTANT.PRESENCE.STREAMING;
     if (event.selfMute) presence = CONSTANT.PRESENCE.SELFMUTE;
     if (event.selfDeaf) presence = CONSTANT.PRESENCE.SELFDEAF;
   }
@@ -104,6 +104,8 @@ function GetColor(presence) {
       return CONSTANT.COLOR.YELLOW;
     case CONSTANT.PRESENCE.SELFDEAF:
       return CONSTANT.COLOR.RED;
+    case CONSTANT.PRESENCE.STREAMING:
+      return CONSTANT.COLOR.PURPLE;
   }
 }
 
