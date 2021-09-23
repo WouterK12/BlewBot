@@ -34,6 +34,7 @@ function GetScalingDates(timespan) {
   switch (timespan) {
     case CONSTANT.TIMESPAN.HOUR:
       prevDate.setHours(prevDate.getHours() - 1);
+      // prevDate.setMinutes(prevDate.getMinutes() - 5); // for testing
       break;
     case CONSTANT.TIMESPAN.FOURHOURS:
       prevDate.setHours(prevDate.getHours() - 4);
@@ -114,15 +115,9 @@ function ParseData(data, maxPrevDate) {
   for (let x = 0; x < data.length; x++) {
     const user = data[x];
 
-    // test if user was updated within active timespan (1h, 4h, 1d, 1w, 1m, all)
-    if (GetDate(user.updatedAt) <= maxPrevDate) continue;
-
     // for every event of that user
     for (let y = 0; y < user.events.length; y++) {
       const event = user.events[y];
-
-      // test if event has happened within active timespan (1h, 4h, 1d, 1w, 1m, all)
-      if (GetDate(event.time) <= maxPrevDate) continue;
 
       // don't visualize disconnected
       let presence = GetPresence(event);
@@ -146,6 +141,14 @@ function ParseData(data, maxPrevDate) {
       } else {
         // else next event exists
         nextEvent = user.events[y + 1];
+      }
+
+      // test if current and next event are not within active timespan (1h, 4h, 1d, 1w, 1m)
+      if (GetDate(event.time) <= maxPrevDate) {
+        if (GetDate(nextEvent.time) < maxPrevDate) continue;
+
+        // set current event time to be at start of chart (no gaps)
+        event.time = maxPrevDate.getTime();
       }
 
       // create new event
