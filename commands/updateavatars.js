@@ -2,6 +2,8 @@ const { client } = require("../index");
 const axios = require("axios");
 const User = require("../models/User");
 
+const errorMessage = "❌  Whoops! Something went wrong!\nTry again later.";
+
 module.exports = {
   name: "updateavatars",
   aliases: ["ua"],
@@ -15,23 +17,27 @@ module.exports = {
       "💾  Updating all profile pictures..."
     );
 
-    const members = await message.guild.members.cache;
-
-    members.forEach((member) => {
-      console.log(member.user.id);
-      User.updateOne(
-        { userId: member.user.id },
-        { avatar: member.user.avatarURL() },
-        (err, user) => {
-          console.log(user);
-          if (err) {
-            return msg.edit(
-              "❌  Whoops! Something went wrong!\nTry again later."
-            );
-          }
-        }
-      );
-    });
+    // const members = await message.guild.members.cache;
+    const members = message.guild.members
+      .fetch()
+      .then((members) => {
+        members.forEach((member) => {
+          User.updateOne(
+            { userId: member.user.id },
+            { avatar: member.user.avatarURL() },
+            (err, user) => {
+              if (err) {
+                console.log(err);
+                return msg.edit(errorMessage);
+              }
+            }
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        return msg.edit(errorMessage);
+      });
 
     return msg.edit(
       "✅  Successfully updated all profile pictures in the database."
