@@ -1,4 +1,5 @@
 const { client } = require("../index");
+const mongoose = require("mongoose");
 const User = require("../models/User");
 const Event = require("../models/Event");
 
@@ -12,9 +13,12 @@ client.on("ready", async () => {
   const guilds = client.guilds.cache.size;
   console.log(`[BOT] Currently in ${guilds} guilds.`);
 
-  // Check of users in voice channel(s) and update their latest events to match their current conditions
-  // (if the bot unexpectedly went offline)
+  CheckVoiceChannelActivity();
+});
 
+// Check of users in voice channel(s) and update their latest events to match their current conditions
+// (if the bot unexpectedly went offline)
+function CheckVoiceChannelActivity() {
   client.guilds.cache.forEach(async (guild) => {
     // check only first voice channel of guild
     let channel = guild.channels.cache.find((c) => c.type === "voice");
@@ -31,7 +35,7 @@ client.on("ready", async () => {
       UpdateUser(user, userIsConnected);
     });
   });
-});
+}
 
 function UpdateUser(user, connected) {
   let latestEvent = user.events[user.events.length - 1];
@@ -45,11 +49,11 @@ function UpdateUser(user, connected) {
 
   if (latestEvent.connected === true) {
     if (connected === false) {
-      SetDisconnected(lastEvent);
+      SetDisconnected(latestEvent);
     }
     if (connected === true) {
-      SetDisconnected(lastEvent);
-      CreateNewEvent(lastEvent);
+      SetDisconnected(latestEvent);
+      CreateNewEvent(latestEvent);
     }
   }
 }
