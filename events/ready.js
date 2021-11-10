@@ -14,11 +14,18 @@ client.on("ready", async () => {
   console.log(`[BOT] Currently in ${guilds} guilds.`);
 
   CheckVoiceChannelActivity();
+  PurgeOldData();
+
+  const oneWeek = 1000 * 60 * 60 * 24 * 7;
+
+  setInterval(() => {
+    PurgeOldData();
+  }, oneWeek);
 });
 
 // Check of users in voice channel(s) and update their latest events to match their current conditions
 // (if the bot unexpectedly went offline)
-function CheckVoiceChannelActivity() {
+function CheckVoiceChannelActivity(users) {
   client.guilds.cache.forEach(async (guild) => {
     // check only first voice channel of guild
     let channel = guild.channels.cache.find((c) => c.type === "voice");
@@ -76,4 +83,18 @@ function CreateNewEvent(latestEvent) {
 function SetDisconnected(event) {
   event.connected = false;
   event.save();
+}
+
+// Purge data older than one month
+// (not visible on graph)
+function PurgeOldData() {
+  let oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  oneMonthAgo = oneMonthAgo.getTime();
+
+  Event.deleteMany({ time: { $lte: oneMonthAgo } }).then((deleted) => {
+    console.log(
+      `[PURGE] Deleted ${deleted.deletedCount} documents that were older than one month`
+    );
+  });
 }
