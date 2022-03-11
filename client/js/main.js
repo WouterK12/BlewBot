@@ -87,10 +87,7 @@ function UpdateGraph(data) {
     },
   };
 
-  if (
-    timespan === CONSTANT.TIMESPAN.WEEK ||
-    timespan === CONSTANT.TIMESPAN.MONTH
-  ) {
+  if (timespan === CONSTANT.TIMESPAN.WEEK || timespan === CONSTANT.TIMESPAN.MONTH) {
     options.hAxis.format = "dd/MM";
   }
 
@@ -181,6 +178,7 @@ function UpdateUsers(data, parsedData) {
       // first event in array is the oldest, loop through it in reverse (chronological)
       for (let i = user.events.length - 1; i > 0; i--) {
         const event = user.events[i];
+        if (event == null) continue;
 
         if (event.connected) connectionStartTime = event.time;
         if (!event.connected) break;

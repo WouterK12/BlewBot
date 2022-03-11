@@ -85,8 +85,13 @@ function IsClose(date1, date2) {
 
 // sort function to compare users (sort user list)
 function SortUsersByConnection(a, b) {
-  let ac = a.events[a.events.length - 1].connected;
-  let bc = b.events[b.events.length - 1].connected;
+  let ac = a.events[a.events.length - 1];
+  let bc = b.events[b.events.length - 1];
+
+  if (ac == null || bc == null) return 0;
+
+  ac = ac.connected;
+  bc = bc.connected;
 
   // sort by connection status
   if (ac !== bc) {
@@ -110,12 +115,15 @@ function SortUsersByConnection(a, b) {
 function GetPresence(event) {
   let presence = CONSTANT.PRESENCE.DISCONNECTED;
 
+  if (event == null) return presence;
+
   if (event.connected) {
     presence = CONSTANT.PRESENCE.CONNECTED;
     if (event.streaming) presence = CONSTANT.PRESENCE.STREAMING;
     if (event.selfMute) presence = CONSTANT.PRESENCE.SELFMUTE;
     if (event.selfDeaf) presence = CONSTANT.PRESENCE.SELFDEAF;
   }
+
   return presence;
 }
 
@@ -143,6 +151,7 @@ function ParseData(data, maxPrevDate) {
     // for every event of that user
     for (let y = 0; y < user.events.length; y++) {
       const event = user.events[y];
+      if (event == null) continue;
 
       // don't visualize disconnected
       let presence = GetPresence(event);
@@ -177,13 +186,7 @@ function ParseData(data, maxPrevDate) {
       }
 
       // create new event
-      let newEvent = [
-        user.name,
-        presence,
-        GetColor(presence),
-        GetDate(event.time),
-        GetDate(nextEvent.time),
-      ];
+      let newEvent = [user.name, presence, GetColor(presence), GetDate(event.time), GetDate(nextEvent.time)];
 
       parsedData.push(newEvent);
     }
