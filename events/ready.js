@@ -33,9 +33,7 @@ function CheckVoiceChannelActivity(users) {
     const users = await User.find().populate("events");
     users.forEach((user) => {
       // test if user is connected
-      let userIsConnected = channel.members.find(
-        (m) => m.user.id == user.userId
-      );
+      let userIsConnected = channel.members.find((m) => m.user.id == user.userId);
       // fix type
       userIsConnected = userIsConnected ? true : false;
 
@@ -46,6 +44,8 @@ function CheckVoiceChannelActivity(users) {
 
 function UpdateUser(user, connected) {
   let latestEvent = user.events[user.events.length - 1];
+
+  if (latestEvent == null || latestEvent.connected == null) return;
 
   if (latestEvent.connected === false) {
     if (connected === false) return; // event doesn't need to be updated
@@ -93,8 +93,6 @@ function PurgeOldData() {
   oneMonthAgo = oneMonthAgo.getTime();
 
   Event.deleteMany({ time: { $lte: oneMonthAgo } }).then((deleted) => {
-    console.log(
-      `[PURGE] Deleted ${deleted.deletedCount} documents that were older than one month`
-    );
+    console.log(`[PURGE] Deleted ${deleted.deletedCount} documents that were older than one month`);
   });
 }
