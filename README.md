@@ -2,6 +2,10 @@
 
 BlewBot is a Discord bot. Use it to keep track of activity in voice channels.
 
+![Dashboard](https://github.com/WouterK12/BlewBot/blob/master/screenshots/dashboard.png?raw=true)
+
+![Login](https://github.com/WouterK12/BlewBot/blob/master/screenshots/login.png?raw=true)
+
 ## Requirements
 
 - [Node.js](https://nodejs.org/en/) with [npm](https://www.npmjs.com/)
