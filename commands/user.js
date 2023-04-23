@@ -53,8 +53,6 @@ module.exports = {
       }
     }
 
-    console.log(statsForChannels);
-
     for (const [channelName, timeConnected] of Object.entries(statsForChannels)) {
       statsEmbed.addField(channelName, convertMsToTime(timeConnected));
     }
