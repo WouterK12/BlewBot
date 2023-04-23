@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 module.exports = {
   async GetUser(member) {
-    let user = await User.findOne({ userId: member.id });
+    let user = await User.findOne({ userId: member.id }).populate("events");
     if (user) return user;
 
     const newUser = new User({
