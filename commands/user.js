@@ -13,6 +13,12 @@ module.exports = {
   description: `View statistics of a specific user (${process.env.PREFIX}user @Name)`,
 
   async execute(message, args) {
+    if (!args.length) {
+      return message.channel.send(
+        `Tag a user to view their statistics.\nExample: \`${process.env.PREFIX}user @${client.user.username}\``
+      );
+    }
+
     let msg = await message.channel.send(retrieveEmbed);
 
     const member = await getMemberFromMention(message.guild, args[0]);
@@ -34,27 +40,28 @@ module.exports = {
 
     let connectedSinceEvent;
 
-    for await (const event of userInDb.events) {
+    for (const event of userInDb.events) {
       if (!connectedSinceEvent && event.connected) {
         connectedSinceEvent = event;
         continue;
       }
 
       if (connectedSinceEvent && !event.connected) {
-        const channel = await client.channels.fetch(connectedSinceEvent.channel);
+        const channelId = connectedSinceEvent.channel;
         const timeConnected = +event.time - +connectedSinceEvent.time;
 
-        if (statsForChannels[channel.name]) {
-          statsForChannels[channel.name] += timeConnected;
+        if (statsForChannels[channelId]) {
+          statsForChannels[channelId] += timeConnected;
         } else {
-          statsForChannels[channel.name] = timeConnected;
+          statsForChannels[channelId] = timeConnected;
         }
         connectedSinceEvent = null;
       }
     }
 
-    for (const [channelName, timeConnected] of Object.entries(statsForChannels)) {
-      statsEmbed.addField(channelName, convertMsToTime(timeConnected));
+    for await (const [channelId, timeConnected] of Object.entries(statsForChannels)) {
+      const channel = await client.channels.fetch(channelId);
+      statsEmbed.addField(channel.name, convertMsToTime(timeConnected));
     }
 
     return msg.edit(statsEmbed);
